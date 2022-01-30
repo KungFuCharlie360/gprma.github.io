@@ -1,25 +1,43 @@
 import logo from './logo.svg';
 import './App.css';
-
-function App() {
+import client from './ApolloClient';
+import {gql} from "@apollo/client";
+function App({testHeaders}) {
+  console.log(testHeaders);
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Learning React js
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
+}
+
+export async function getStaticProperties() {
+  const { data : testHeaders } = await client
+    .query({
+      query: gql`
+      {
+        testHeaders {
+          slugtest
+          title
+          logo {
+            id
+          }
+        }
+      }      
+    `
+    })
+    .then(result => console.log(result));
+  console.log(testHeaders);
+  return {
+    props : {
+        testHeaders
+    }
+  }
 }
 
 export default App;
